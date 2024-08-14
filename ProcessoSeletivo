@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Processo Seletivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input[type="checkbox"] {
+            width: auto;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #28a745;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group button:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulário de Processo Seletivo</h1>
+        <form id="applicationForm">
+            <div class="form-group">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name">
+                <div id="nameError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email">
+                <div id="emailError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefone:</label>
+                <input type="tel" id="phone" name="phone">
+                <div id="phoneError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="terms" name="terms">
+                <label for="terms">Aceito os termos e condições</label>
+                <div id="termsError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="validateForm()">Enviar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Clear previous errors
+            document.getElementById('nameError').innerText = '';
+            document.getElementById('emailError').innerText = '';
+            document.getElementById('phoneError').innerText = '';
+            document.getElementById('termsError').innerText = '';
+
+            // Get form values
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var phone = document.getElementById('phone').value;
+            var terms = document.getElementById('terms').checked;
+
+            var isValid = true;
+
+            // Validate name
+            if (name.trim() === '') {
+                document.getElementById('nameError').innerText = 'O nome é obrigatório.';
+                isValid = false;
+            }
+
+            // Validate email
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').innerText = 'E-mail inválido.';
+                isValid = false;
+            }
+
+            // Validate phone
+            var phonePattern = /^[0-9]{10,15}$/; // Ajuste o padrão conforme necessário
+            if (!phonePattern.test(phone)) {
+                document.getElementById('phoneError').innerText = 'Telefone inválido.';
+                isValid = false;
+            }
+
+            // Validate terms
+            if (!terms) {
+                document.getElementById('termsError').innerText = 'Você deve aceitar os termos e condições.';
+                isValid = false;
+            }
+
+            // If all validations pass
+            if (isValid) {
+                alert('Formulário enviado com sucesso!');
+                // Aqui você pode adicionar a lógica para enviar os dados do formulário, por exemplo, usando AJAX ou o método submit().
+            }
+        }
+    </

@@ -1,0 +1,77 @@
++------------------+
+|    iPhone        |
++------------------+
+| + playMusic()    |
+| + stopMusic()    |
+| + makeCall()     |
+| + endCall()      |
+| + browseInternet() |
+| + openTab()      |
++------------------+
+     /   |    \
+    /    |     \
+   /     |      \
+  v      v       v
++------------------+ +------------------+ +------------------+
+| ReprodutorMusical| | AparelhoTelefonico| | NavegadorInternet|
++------------------+ +------------------+ +------------------+
+| + playMusic()    | | + makeCall()     | | + browseInternet() |
+| + stopMusic()    | | + endCall()      | | + openTab()       |
++------------------+ +------------------+ +------------------+
+
+
+-----------------------
+
+public interface ReprodutorMusical {
+    void playMusic();
+    void stopMusic();
+}
+
+------------------
+
+public interface AparelhoTelefonico {
+    void makeCall(String phoneNumber);
+    void endCall();
+}
+
+----------------
+
+public interface NavegadorInternet {
+    void browseInternet(String url);
+    void openTab(String url);
+}
+
+------------------
+
+public class iPhone implements ReprodutorMusical, AparelhoTelefonico, NavegadorInternet {
+    
+    @Override
+    public void playMusic() {
+        System.out.println("Reproduzindo música...");
+    }
+
+    @Override
+    public void stopMusic() {
+        System.out.println("Música parada.");
+    }
+
+    @Override
+    public void makeCall(String phoneNumber) {
+        System.out.println("Ligando para " + phoneNumber);
+    }
+
+    @Override
+    public void endCall() {
+        System.out.println("Chamada encerrada.");
+    }
+
+    @Override
+    public void browseInternet(String url) {
+        System.out.println("Navegando para " + url);
+    }
+
+    @Override
+    public void openTab(String url) {
+        System.out.println("Abrindo nova aba com " + url);
+    }
+}

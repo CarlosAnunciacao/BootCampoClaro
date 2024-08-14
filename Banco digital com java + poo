@@ -1,0 +1,134 @@
+1. Classe Cliente
+public class Cliente {
+    private String nome;
+    private String cpf;
+
+    public Cliente(String nome, String cpf) {
+        this.nome = nome;
+        this.cpf = cpf;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                '}';
+    }
+}
+
+
+2. Classe ContaBancária
+
+public class ContaBancaria {
+    private Cliente cliente;
+    private double saldo;
+
+    public ContaBancaria(Cliente cliente) {
+        this.cliente = cliente;
+        this.saldo = 0.0;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void depositar(double valor) {
+        if (valor > 0) {
+            saldo += valor;
+            System.out.println("Depósito de R$ " + valor + " realizado com sucesso.");
+        } else {
+            System.out.println("Valor do depósito deve ser positivo.");
+        }
+    }
+
+    public void sacar(double valor) {
+        if (valor > 0 && valor <= saldo) {
+            saldo -= valor;
+            System.out.println("Saque de R$ " + valor + " realizado com sucesso.");
+        } else {
+            System.out.println("Saldo insuficiente ou valor inválido para saque.");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ContaBancaria{" +
+                "cliente=" + cliente +
+                ", saldo=" + saldo +
+                '}';
+    }
+}
+
+
+3. Classe Banco
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Banco {
+    private Map<String, ContaBancaria> contas;
+
+    public Banco() {
+        contas = new HashMap<>();
+    }
+
+    public void criarConta(Cliente cliente) {
+        if (!contas.containsKey(cliente.getCpf())) {
+            ContaBancaria novaConta = new ContaBancaria(cliente);
+            contas.put(cliente.getCpf(), novaConta);
+            System.out.println("Conta criada para o cliente: " + cliente.getNome());
+        } else {
+            System.out.println("Conta já existe para o cliente com CPF: " + cliente.getCpf());
+        }
+    }
+
+    public ContaBancaria getConta(String cpf) {
+        return contas.get(cpf);
+    }
+
+    @Override
+    public String toString() {
+        return "Banco{" +
+                "contas=" + contas +
+                '}';
+    }
+}
+
+
+4. Classe Main
+public class Main {
+    public static void main(String[] args) {
+        Banco banco = new Banco();
+
+        Cliente cliente1 = new Cliente("João Silva", "12345678900");
+        Cliente cliente2 = new Cliente("Maria Oliveira", "98765432100");
+
+        banco.criarConta(cliente1);
+        banco.criarConta(cliente2);
+
+        ContaBancaria contaJoao = banco.getConta(cliente1.getCpf());
+        ContaBancaria contaMaria = banco.getConta(cliente2.getCpf());
+
+        contaJoao.depositar(500.00);
+        contaMaria.depositar(1000.00);
+
+        contaJoao.sacar(200.00);
+        contaMaria.sacar(500.00);
+
+        System.out.println(contaJoao);
+        System.out.println(contaMaria);
+    }
+}

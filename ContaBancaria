@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Conta Bancária</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, button {
+            display: block;
+            margin: 10px 0;
+        }
+        input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simulação de Conta Bancária</h1>
+
+    <label for="action">Escolha a ação:</label>
+    <select id="action">
+        <option value="deposit">Depósito</option>
+        <option value="withdraw">Saque</option>
+    </select>
+
+    <label for="amount">Valor:</label>
+    <input type="number" id="amount" placeholder="Digite o valor">
+
+    <button onclick="performTransaction()">Executar</button>
+
+    <script>
+        // Inicializa o saldo da conta
+        let saldo = 0;
+
+        function performTransaction() {
+            const action = document.getElementById('action').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (isNaN(amount) || amount <= 0) {
+                console.log("Por favor, insira um valor válido.");
+                return;
+            }
+
+            if (action === 'deposit') {
+                saldo += amount;
+                console.log(`Depósito realizado com sucesso. Saldo atual: R$${saldo.toFixed(2)}`);
+            } else if (action === 'withdraw') {
+                if (amount > saldo) {
+                    console.log("Saldo insuficiente para o saque.");
+                } else {
+                    saldo -= amount;
+                    console.log(`Saque realizado com sucesso. Saldo atual: R$${saldo.toFixed(2)}`);
+                }
+            } else {
+                console.log("Ação inválida.");
+            }
+        }
+    </script>
+</body>
+</html>

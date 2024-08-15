@@ -1,0 +1,155 @@
+package com.example.demo.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Item {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String description;
+
+    // Getters and Setters
+}
+
+
+------------------
+
+package com.example.demo.repository;
+
+import com.example.demo.model.Item;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ItemRepository extends JpaRepository<Item, Long> {
+}
+
+
+-------------------------
+
+package com.example.demo.controller;
+
+import com.example.demo.model.Item;
+import com.example.demo.repository.ItemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/items")
+public class ItemController {
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @GetMapping
+    public List<Item> getAllItems() {
+        return itemRepository.findAll();
+    }
+
+    @PostMapping
+    public Item createItem(@RequestBody Item item) {
+        return itemRepository.save(item);
+    }
+
+    @GetMapping("/{id}")
+    public Item getItemById(@PathVariable Long id) {
+        return itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item not found"));
+    }
+
+    @PutMapping("/{id}")
+    public Item updateItem(@PathVariable Long id, @RequestBody Item item) {
+        item.setId(id);
+        return itemRepository.save(item);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable Long id) {
+        itemRepository.deleteById(id);
+    }
+}
+ 
+---------------------------
+
+package com.example.demo.controller;
+
+import com.example.demo.model.Item;
+import com.example.demo.repository.ItemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/items")
+public class ItemController {
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @GetMapping
+    public List<Item> getAllItems() {
+        return itemRepository.findAll();
+    }
+
+    @PostMapping
+    public Item createItem(@RequestBody Item item) {
+        return itemRepository.save(item);
+    }
+
+    @GetMapping("/{id}")
+    public Item getItemById(@PathVariable Long id) {
+        return itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item not found"));
+    }
+
+    @PutMapping("/{id}")
+    public Item updateItem(@PathVariable Long id, @RequestBody Item item) {
+        item.setId(id);
+        return itemRepository.save(item);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable Long id) {
+        itemRepository.deleteById(id);
+    }
+}
+
+
+--------------
+
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=password
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+
+
+------------- Testar Localmente
+
+./mvnw spring-boot:run
+
+---------------- Preparar para o Deploy no Railway
+
+web: java -jar target/demo-0.0.1-SNAPSHOT.jar
+
+
+
+4.2. Configurar o Railway
+
+    Crie uma Conta no Railway: Acesse Railway e crie uma conta ou faça login.
+
+    Criar um Novo Projeto: No painel do Railway, clique em "New Project".
+
+    Conectar ao GitHub: Conecte seu repositório GitHub onde o projeto está hospedado.
+
+    Deploy da Aplicação: Railway irá detectar o arquivo Procfile e construir o projeto. O Railway cuida do deploy e configuração do ambiente.
+
+    Variáveis de Ambiente: Se necessário, adicione variáveis de ambiente para configuração do banco de dados ou outras configurações.
+
+    Deploy e Teste: Após o deploy, Railway fornecerá uma URL pública para acessar sua API. Teste a API utilizando essa URL.

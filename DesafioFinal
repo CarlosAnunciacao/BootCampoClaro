@@ -1,0 +1,125 @@
+1. Configuração do Projeto
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+</dependencies>
+
+
+2. Implementação dos Padrões de Projeto
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class NotificationService {
+
+    // Singleton: instância única
+    private static NotificationService instance;
+
+    // Construtor privado para evitar instância externa
+    private NotificationService() {}
+
+    public static NotificationService getInstance() {
+        if (instance == null) {
+            instance = new NotificationService();
+        }
+        return instance;
+    }
+
+    public void sendNotification(String message) {
+        // Lógica para enviar notificação
+        System.out.println("Sending notification: " + message);
+    }
+}
+
+=-----------------
+
+// Interface para Notificação
+public interface Notification {
+    void send(String message);
+}
+
+// Implementação de Notificação por Email
+public class EmailNotification implements Notification {
+    @Override
+    public void send(String message) {
+        System.out.println("Email: " + message);
+    }
+}
+
+// Implementação de Notificação por SMS
+public class SMSNotification implements Notification {
+    @Override
+    public void send(String message) {
+        System.out.println("SMS: " + message);
+    }
+}
+
+// Implementação de Notificação por Push
+public class PushNotification implements Notification {
+    @Override
+    public void send(String message) {
+        System.out.println("Push: " + message);
+    }
+}
+
+// Factory Method para criar notificações
+public class NotificationFactory {
+    public static Notification createNotification(String type) {
+        switch (type) {
+            case "EMAIL":
+                return new EmailNotification();
+            case "SMS":
+                return new SMSNotification();
+            case "PUSH":
+                return new PushNotification();
+            default:
+                throw new IllegalArgumentException("Unknown notification type");
+        }
+    }
+}
+
+
+----------------------
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class NotificationController {
+
+    private final NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @GetMapping("/send")
+    public String sendNotification(@RequestParam String type, @RequestParam String message) {
+        Notification notification = NotificationFactory.createNotification(type);
+        notification.send(message);
+        return "Notification sent!";
+    }
+}
+
+
+Resultado esperado:
+
+Para enviar uma notificação por Email: 
+
+http://localhost:8080/send?type=EMAIL&message=Hello%20via%20Email // Saída esperada: Email: Hello via Email
+
+Para enviar uma notificação por SMS: http://localhost:8080/send?type=SMS&message=Hello%20via%20SMS
+ // Saída esperada: SMS: Hello via SMS
+
+Para enviar uma notificação por Push: http://localhost:8080/send?type=PUSH&message=Hello%20via%20Push // Saída esperada: Push: Hello via Push
+
+
+
+Após enviar a requisição, a resposta da API será: Notification sent!
